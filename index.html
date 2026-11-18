@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ramen Tsumugi Amsterdam</title>
+<meta name="description" content="Ramen Tsumugi Amsterdam. Tantanmen and ramen on Marco Polostraat, Amsterdam-West. Open 17:00 to 22:00, closed on Tuesdays.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* Layout idea: a white page with wide margins. A quiet splash with the name only,
+     then full-width photos, then Japanese and English set side by side.
+     One indigo thread (tsumugi = spun thread) is the only accent. */
+  :root {
+    --paper: #ffffff;
+    --wash: #f3f3f1;
+    --ink: #111111;
+    --muted: #6b6b6b;
+    --line: #e2e2df;
+    --thread: #2b3f8c;
+    --font-mark: "Josefin Sans", "Futura", "Avenir Next", Arial, sans-serif;
+    --font-en: "EB Garamond", "Garamond", Georgia, serif;
+    --font-ja: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --gutter: clamp(20px, 6vw, 88px);
+    color-scheme: light;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-en);
+    font-size: 1.125rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--thread); outline-offset: 3px; }
+  img { max-width: 100%; display: block; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* small caps label used for nav and section subtitles */
+  .label {
+    font-family: var(--font-mark);
+    font-size: 0.6875rem;
+    font-weight: 400;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- splash ---------- */
+  .splash {
+    min-height: min(80vh, 760px);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding-top: 28px;
+  }
+  .splash .centre {
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    gap: 22px;
+    padding: 40px 0;
+  }
+  .wordmark {
+    font-family: var(--font-mark);
+    font-weight: 300;
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    line-height: 1;
+  }
+  .wordmark .w-big {
+    font-size: clamp(2.75rem, 9vw, 5.5rem);
+    letter-spacing: 0.32em;
+    margin-right: -0.32em; /* balance trailing tracking */
+  }
+  .wordmark .w-small {
+    font-family: var(--font-mark);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.36em;
+    margin-right: -0.36em;
+  }
+  .sub {
+    font-family: var(--font-mark);
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    margin: 0 -0.36em 0 0;
+  }
+  .thread {
+    width: 1px;
+    height: 56px;
+    background: var(--thread);
+    transform-origin: top;
+    animation: spin 1.4s cubic-bezier(.2,.7,.2,1) .2s both;
+  }
+  @keyframes spin { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+  nav.bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px 24px;
+    padding: 18px 0 26px;
+  }
+  nav.bar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 34px;
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  nav.bar a { text-decoration: none; }
+  nav.bar a:hover { color: var(--thread); }
+  .now {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--muted);
+  }
+  .now .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    border: 1.5px solid var(--thread);
+    flex: none;
+  }
+  .now[data-open="true"] { color: var(--ink); }
+  .now[data-open="true"] .dot { background: var(--thread); }
+
+  /* ---------- photos ---------- */
+  .photo {
+    position: relative;
+    margin: 0;
+    background: var(--wash);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .photo.wide { aspect-ratio: 16 / 8; }
+  .photo.square { aspect-ratio: 4 / 3; }
+  .photo .slot {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    color: var(--muted);
+    text-align: center;
+    padding: 16px;
+  }
+  .photo .slot::before {
+    content: "";
+    width: 34px; height: 34px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    opacity: .6;
+  }
+  .photo img { width: 100%; height: 100%; object-fit: cover; }
+  @media (max-width: 640px) { .photo.wide { aspect-ratio: 4 / 3; } }
+
+  /* ---------- bilingual blocks ---------- */
+  .duo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px clamp(32px, 7vw, 110px);
+    padding: clamp(64px, 10vw, 128px) 0;
+  }
+  .duo .ja { font-family: var(--font-ja); }
+  .duo h2 {
+    font-weight: 400;
+    margin: 0 0 1.4em;
+    text-wrap: balance;
+  }
+  .duo .ja h2 {
+    font-family: var(--font-ja);
+    font-weight: 600;
+    font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+    line-height: 1.8;
+    letter-spacing: 0.08em;
+  }
+  .duo .en h2 {
+    font-family: var(--font-en);
+    font-size: clamp(1.625rem, 2.8vw, 2.125rem);
+    line-height: 1.3;
+  }
+  .duo .ja p { font-size: 0.9375rem; line-height: 2.1; letter-spacing: 0.04em; margin: 0; }
+  .duo .en p { margin: 0; max-width: 32em; }
+  .duo p + p { margin-top: 1em; }
+  @media (max-width: 760px) { .duo { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---------- section heads ---------- */
+  .head {
+    text-align: center;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: clamp(72px, 10vw, 120px) 0 clamp(40px, 6vw, 64px);
+  }
+  .head h2 {
+    font-family: var(--font-mark);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+    letter-spacing: 0.3em;
+    margin: 0 -0.3em 0 0;
+    line-height: 1;
+  }
+  .head .kana {
+    font-family: var(--font-ja);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+  }
+  section { scroll-margin-top: 16px; }
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+  /* ---------- menu ---------- */
+  .signature {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px clamp(24px, 4vw, 56px);
+  }
+  .dish { display: grid; gap: 18px; align-content: start; }
+  .dish .names { display: grid; gap: 2px; }
+  .dish h3 {
+    font-family: var(--font-en);
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin: 0;
+  }
+  .dish .jp { font-family: var(--font-ja); font-size: 0.8125rem; letter-spacing: 0.12em; color: var(--muted); }
+  .dish p { margin: 0; color: var(--muted); }
+  @media (max-width: 640px) { .signature { grid-template-columns: minmax(0, 1fr); } }
+
+  .also { margin: 28px 0 0; color: var(--muted); font-size: 1rem; }
+  .also span { color: var(--ink); }
+  .course {
+    margin-top: clamp(56px, 8vw, 88px);
+    padding-top: clamp(40px, 6vw, 56px);
+    border-top: 1px solid var(--line);
+  }
+  .course > h4 { margin: 0 0 28px; color: var(--thread); }
+  .sides {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px clamp(20px, 3vw, 40px);
+  }
+  .dish.small { gap: 14px; }
+  .dish.small h3 { font-size: 1.25rem; }
+  .dish.small p { font-size: 0.9375rem; }
+  @media (max-width: 860px) { .sides { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 480px) { .sides { grid-template-columns: minmax(0, 1fr); } }
+  .list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 36px clamp(24px, 4vw, 56px);
+    margin-top: clamp(56px, 8vw, 88px);
+    padding-top: clamp(40px, 6vw, 56px);
+    border-top: 1px solid var(--line);
+  }
+  .list h4 { margin: 0 0 14px; color: var(--thread); }
+  .list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .list li { display: grid; gap: 0; }
+  .list li .n { font-size: 1.1875rem; }
+  .list li .d { font-size: 0.9375rem; color: var(--muted); }
+  @media (max-width: 760px) { .list { grid-template-columns: minmax(0, 1fr); } }
+
+  /* ---------- find us ---------- */
+  .find {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px clamp(32px, 7vw, 110px);
+    padding-bottom: clamp(72px, 10vw, 120px);
+  }
+  .find h3 { margin: 0 0 18px; color: var(--thread); }
+  address {
+    font-style: normal;
+    font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+    line-height: 1.4;
+    margin-bottom: 18px;
+  }
+  .contact { margin: 0 0 28px; font-variant-numeric: tabular-nums; }
+  .contact a { text-decoration-color: var(--line); text-underline-offset: .2em; }
+  .button {
+    display: inline-block;
+    padding: 14px 26px;
+    border: 1px solid var(--ink);
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease;
+  }
+  .button:hover { background: var(--ink); color: var(--paper); }
+  .order {
+    display: inline-block;
+    padding: 15px 30px;
+    background: var(--thread);
+    color: #fff;
+    border: 1px solid var(--thread);
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease;
+  }
+  .order:hover { background: var(--paper); color: var(--thread); }
+  .splash .order { margin-top: 10px; }
+  .walkin {
+    margin: 6px 0 0;
+    font-size: 1.125rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .walkin strong { color: var(--ink); font-weight: 500; }
+  .order.ghost { background: transparent; color: var(--thread); }
+  .order.ghost:hover { background: var(--thread); color: #fff; }
+  .hours-note { margin: 20px 0 0; color: var(--muted); font-size: 1rem; }
+  .hours-note strong { color: var(--ink); font-weight: 500; }
+  .hours-note a { color: var(--thread); text-underline-offset: .2em; }
+  .order-cta {
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    text-align: center;
+    margin-top: clamp(56px, 8vw, 88px);
+    padding: clamp(40px, 6vw, 64px) 16px;
+    background: var(--wash);
+  }
+  .order-cta p { margin: 0; font-size: clamp(1.25rem, 2.2vw, 1.5rem); }
+  .order-cta .jp { font-family: var(--font-ja); font-size: 0.8125rem; letter-spacing: 0.12em; color: var(--muted); }
+  table.hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  table.hours th, table.hours td {
+    text-align: left; font-weight: 400;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  table.hours td { text-align: right; }
+  table.hours tr.closed { color: var(--muted); }
+  table.hours tr.today th, table.hours tr.today td { color: var(--thread); font-weight: 500; }
+  @media (max-width: 760px) { .find { grid-template-columns: minmax(0, 1fr); } }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 36px 0 48px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px 32px;
+    color: var(--muted);
+  }
+  footer .wordmark-sm {
+    font-family: var(--font-mark);
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .thread { animation: none; }
+    .button { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap splash" id="top">
+  <div class="centre">
+    <h1 class="wordmark"><span class="w-small">RAMEN</span> <span class="w-big">TSUMUGI</span> <span class="w-small">AMSTERDAM</span></h1>
+    <span class="thread" aria-hidden="true"></span>
+    <p class="walkin"><strong>Walk-ins welcome.</strong> Most guests just come by.<br>It is easiest to get a seat before 19:00.</p>
+    <a class="order ghost label" href="#tebi-reservations">Reserve a table</a>
+  </div>
+  <nav class="bar label" aria-label="Sections">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#find-us">Find us</a></li>
+      <li><a href="#tebi-reservations">Reservations</a></li>
+      <li><a href="https://live.tebi.co/api/u/qDe2d9AvKE8=" target="_blank" rel="noopener">Takeaway</a></li>
+    </ul>
+    <span class="now" id="open-status" data-open="false"><span class="dot" aria-hidden="true"></span><span id="open-text">17:00 – 22:00 · Closed Tuesdays</span></span>
+  </nav>
+</header>
+
+<main>
+  <figure class="photo wide">
+    <img src="images/tantanmen.jpg" alt="A bowl of tantanmen at Ramen Tsumugi, topped with minced pork, peanuts, bok choy and spring onion" style="object-position: 50% 55%;">
+  </figure>
+
+  <section id="about" class="wrap">
+    <div class="duo">
+      <div class="ja" lang="ja">
+        <h2>日本で覚えた味を、<br>アムステルダムで。</h2>
+        <p>つむぎは、アムステルダム西地区にある小さならーめん屋です。日本で修行して覚えた味を、ここでも同じやり方で作っています。</p>
+        <p>出所の分からない材料は使いません。一杯に必要なものだけを、丁寧に。</p>
+      </div>
+      <div class="en">
+        <h2>A bowl learned in Japan, made in Amsterdam.</h2>
+        <p>Tsumugi is a small ramen shop in Amsterdam-West. We trained in Japan, and we cook here the same way we learned there.</p>
+        <p>Nothing goes into the bowl that we cannot trace back to where it came from, and nothing goes in that the bowl does not need. Guests often tell us it tastes like their trip to Japan.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section id="menu" class="wrap">
+    <div class="head">
+      <h2>MENU</h2>
+      <span class="kana" lang="ja">メニュー</span>
+    </div>
+
+    <div class="signature">
+      <article class="dish">
+        <figure class="photo square">
+          <img src="images/tantanmen.jpg" alt="Classic tantanmen" loading="lazy">
+        </figure>
+        <div class="names">
+          <h3>Classic Tantanmen</h3>
+          <span class="jp" lang="ja">担々麺</span>
+        </div>
+        <p>Our signature bowl. Creamy sesame broth with chilli oil, minced pork, peanuts, bok choy and spring onion.</p>
+      </article>
+      <article class="dish">
+        <figure class="photo square">
+          <img src="images/pork-chop-tantanmen.jpg" alt="Tantanmen topped with a sliced fried pork chop" loading="lazy">
+        </figure>
+        <div class="names">
+          <h3>Pork Chop Tantanmen</h3>
+          <span class="jp" lang="ja">パーコー担々麺</span>
+        </div>
+        <p>Our tantanmen, topped with a crisp fried pork chop.</p>
+      </article>
+    </div>
+
+    <p class="also">Also available: <span>Vegan Tantanmen</span>, fully plant-based.</p>
+
+    <div class="course">
+      <h4 class="label">Ramen</h4>
+      <div class="signature">
+        <article class="dish">
+          <figure class="photo square">
+            <img src="images/all-topping-ramen.jpg" alt="Ramen with chashu, two seasoned eggs, bamboo shoots, nori and cabbage" loading="lazy">
+          </figure>
+          <div class="names">
+            <h3>All Topping Ramen</h3>
+            <span class="jp" lang="ja">全部のせらーめん</span>
+          </div>
+          <p>Everything on top: chashu, two seasoned eggs, bamboo shoots, nori, cabbage and crispy onion.</p>
+        </article>
+        <article class="dish">
+          <figure class="photo square">
+            <img src="images/vegan-ramen.jpg" alt="Vegan ramen with vegetable tempura, cabbage, bamboo shoots and nori" loading="lazy">
+          </figure>
+          <div class="names">
+            <h3>Vegan Ramen</h3>
+            <span class="jp" lang="ja">ヴィーガンらーめん</span>
+          </div>
+          <p>A creamy plant-based bowl with vegetable tempura, cabbage, bamboo shoots and nori.</p>
+        </article>
+      </div>
+      <p class="also">Also available: <span>Shio Ramen</span> and <span>Shoyu Ramen</span>.</p>
+    </div>
+
+    <div class="course">
+      <h4 class="label">Sides &amp; Rice</h4>
+      <div class="sides">
+        <article class="dish small">
+          <figure class="photo square"><img src="images/karaage.jpg" alt="Japanese fried chicken" loading="lazy"></figure>
+          <div class="names"><h3>Karaage</h3><span class="jp" lang="ja">唐揚げ</span></div>
+          <p>Japanese fried chicken. Crisp, with a little sweetness.</p>
+        </article>
+        <article class="dish small">
+          <figure class="photo square"><img src="images/chicken-gyoza.jpg" alt="Pan-fried chicken gyoza with dipping sauce" loading="lazy"></figure>
+          <div class="names"><h3>Chicken Gyoza</h3><span class="jp" lang="ja">鶏餃子</span></div>
+          <p>Pan-fried chicken dumplings with dipping sauce.</p>
+        </article>
+        <article class="dish small">
+          <figure class="photo square"><img src="images/fried-oysters.jpg" alt="Panko-fried oysters with sauce" loading="lazy"></figure>
+          <div class="names"><h3>Fried Oysters</h3><span class="jp" lang="ja">カキフライ</span></div>
+          <p>Oysters in crisp panko, with a rich dipping sauce.</p>
+        </article>
+        <article class="dish small">
+          <figure class="photo square"><img src="images/unagi-don.jpg" alt="Grilled eel over rice with a seasoned egg" loading="lazy"></figure>
+          <div class="names"><h3>Unagi Don</h3><span class="jp" lang="ja">うなぎ丼</span></div>
+          <p>Grilled eel glazed in sweet soy, over rice with a seasoned egg.</p>
+        </article>
+        <article class="dish small">
+          <figure class="photo square"><img src="images/edamame.jpg" alt="A bowl of edamame" loading="lazy"></figure>
+          <div class="names"><h3>Edamame</h3><span class="jp" lang="ja">枝豆</span></div>
+          <p>Salted young soybeans.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="order-cta">
+      <p>Order takeaway from your phone.</p>
+      <span class="jp" lang="ja">テイクアウトのご注文</span>
+      <a class="order label" href="https://live.tebi.co/api/u/qDe2d9AvKE8=" target="_blank" rel="noopener">Order online for takeaway</a>
+    </div>
+  </section>
+
+  <section id="find-us" class="wrap">
+    <div class="head">
+      <h2>FIND US</h2>
+      <span class="kana" lang="ja">店舗情報</span>
+    </div>
+    <div class="find">
+      <div>
+        <h3 class="label">Address</h3>
+        <address>Marco Polostraat 223H<br>1056 DL Amsterdam</address>
+        <p class="contact">Phone <a href="tel:+31202390780">+31 20 239 0780</a></p>
+        <a class="button label" href="https://www.google.com/maps/search/?api=1&amp;query=Ramen+Tsumugi+Amsterdam%2C+Marco+Polostraat+223H%2C+1056+DL+Amsterdam" target="_blank" rel="noopener">Open in Google Maps</a>
+      </div>
+      <div>
+        <h3 class="label">Hours</h3>
+        <table class="hours">
+          <tbody>
+            <tr data-day="Monday"><th scope="row">Monday</th><td>17:00 – 22:00</td></tr>
+            <tr data-day="Tuesday" class="closed"><th scope="row">Tuesday</th><td>Closed</td></tr>
+            <tr data-day="Wednesday"><th scope="row">Wednesday</th><td>17:00 – 22:00</td></tr>
+            <tr data-day="Thursday"><th scope="row">Thursday</th><td>17:00 – 22:00</td></tr>
+            <tr data-day="Friday"><th scope="row">Friday</th><td>17:00 – 22:00</td></tr>
+            <tr data-day="Saturday"><th scope="row">Saturday</th><td>17:00 – 22:00</td></tr>
+            <tr data-day="Sunday"><th scope="row">Sunday</th><td>17:00 – 22:00</td></tr>
+          </tbody>
+        </table>
+        <p class="hours-note"><strong>Mostly walk-in.</strong> No booking needed; seats are easiest to get before 19:00. Coming with a larger group? <a href="#tebi-reservations">Reserve a table</a>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span class="wordmark-sm">RAMEN TSUMUGI AMSTERDAM</span>
+  <span class="label">Marco Polostraat 223H · Amsterdam</span>
+</footer>
+
+<script>
+  (function () {
+    var OPEN = 17, CLOSE = 22, CLOSED_DAY = "Tuesday";
+    var DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    try {
+      var parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Europe/Amsterdam", weekday: "long", hour: "2-digit", hour12: false
+      }).formatToParts(new Date());
+      var day = "", hour = 0;
+      parts.forEach(function (p) {
+        if (p.type === "weekday") day = p.value;
+        if (p.type === "hour") hour = parseInt(p.value, 10) % 24;
+      });
+      var i = DAYS.indexOf(day);
+      if (i < 0) return;
+      var row = document.querySelector('tr[data-day="' + day + '"]');
+      if (row) row.classList.add("today");
+
+      var text, open = false;
+      if (day === CLOSED_DAY) {
+        text = "Closed today · Open tomorrow 17:00";
+      } else if (hour < OPEN) {
+        text = "Open today from 17:00";
+      } else if (hour < CLOSE) {
+        text = "Open now until 22:00";
+        open = true;
+      } else {
+        var next = DAYS[(i + 1) % 7];
+        text = next === CLOSED_DAY
+          ? "Closed tonight · Open " + DAYS[(i + 2) % 7] + " 17:00"
+          : "Closed tonight · Open tomorrow 17:00";
+      }
+      document.getElementById("open-text").textContent = text;
+      document.getElementById("open-status").setAttribute("data-open", open ? "true" : "false");
+    } catch (e) { /* keep the static line */ }
+  })();
+</script>
+
+<!-- Tebi reservation widget -->
+<script src="https://live.tebi.co/ecom/widget-manager.js" data-widget-token="538417_7b3616fbbd6fae4c38d4fafa303aaccfff8059337d6ce2223b6845fdf9ef3464" id="tebi" data-no-minify="1"></script>
+</body>
+</html>
